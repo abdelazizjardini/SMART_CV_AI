@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JRD CV Maker | Engineering Your Career</title>
+<link rel="icon" href="assets/images/icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/cv_style.css">
+<link rel="stylesheet" id="theme-styles" href="assets/css/cv_themes.css">
+<style>
+:root { --primary-cyan:#00f2ff; --glass-bg:rgba(255,255,255,0.05); --border-glow:rgba(0,242,255,0.3); }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{display:flex;height:100vh;font-family:'Poppins',sans-serif;color:white;overflow:hidden;background-color:#050a0f;}
+
+
+#left{width:25%;height:100vh;background:linear-gradient(180deg,#060e1f 0%,#0a1e35 100%);border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;padding:20px 15px;overflow-y:auto;}
+.logo-container{text-align:center;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.logo-container h1{font-size:1.1rem;letter-spacing:3px;color:var(--primary-cyan);text-shadow:0 0 10px rgba(0,242,255,0.5);}
+.logo-container small{font-size:0.6rem;text-transform:uppercase;opacity:0.5;letter-spacing:1px;}
+.section-label{font-size:10px;text-transform:uppercase;color:var(--primary-cyan);margin:18px 0 8px 10px;letter-spacing:2px;font-weight:700;opacity:0.8;}
+.menu-item{background:var(--glass-bg);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);margin-bottom:7px;}
+.menu-item:hover{background:rgba(0,242,255,0.1);border-color:var(--primary-cyan);transform:translateX(5px);}
+.menu-item .icon{width:28px;height:28px;background:rgba(255,255,255,0.05);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;}
+.menu-item h2{font-size:14px;font-weight:400;color:#e0e0e0;flex-grow:1;}
+.step-badge{background:rgba(0,242,255,0.12);color:var(--primary-cyan);font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;border:1px solid rgba(0,242,255,0.22);}
+.status-dot{width:6px;height:6px;background:rgba(255,255,255,0.2);border-radius:50%;}
+.menu-item:hover .status-dot,.menu-item.menu-active .status-dot{background:var(--primary-cyan);box-shadow:0 0 8px var(--primary-cyan);}
+.menu-item.menu-active{background:rgba(0,242,255,0.12)!important;border-color:var(--primary-cyan)!important;transform:translateX(5px);}
+.menu-item.menu-active h2{color:var(--primary-cyan)!important;font-weight:600!important;}
+.menu-item.menu-active .icon{background:rgba(0,242,255,0.15)!important;}
+.download-btn{background:linear-gradient(135deg,#00f2ff 0%,#0072ff 100%)!important;border:none!important;margin-top:15px;}
+.download-btn h2{color:#000!important;font-weight:700!important;}
+
+#right{flex:1;height:100vh;background:radial-gradient(circle at center,#0d2040 0%,#050a0f 100%);overflow-y:auto;padding:30px;display:flex;flex-direction:column;align-items:center;}
+
+#templates-view{width:100%;display:none;}
+#templates-view h2{font-size:1.2rem;color:var(--primary-cyan);letter-spacing:3px;text-transform:uppercase;margin-bottom:25px;text-align:center;}
+.templates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%;}
+.template-card{border:2px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.3s ease;display:flex;flex-direction:column;background:#0a1628;}
+.template-card:hover{border-color:var(--primary-cyan);transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,242,255,0.2);}
+.template-card.selected{border-color:var(--primary-cyan);box-shadow:0 0 25px rgba(0,242,255,0.4);}
+.template-img-wrapper{width:100%;height:200px;overflow:hidden;position:relative;}
+.template-img-wrapper img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s ease;}
+.template-card:hover .template-img-wrapper img{transform:scale(1.05);}
+.template-overlay{position:absolute;inset:0;background:rgba(0,242,255,0.15);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;}
+.template-card:hover .template-overlay{opacity:1;}
+.template-overlay span{background:var(--primary-cyan);color:#000;font-weight:700;padding:8px 20px;border-radius:20px;font-size:13px;}
+.template-info{padding:12px 15px;display:flex;align-items:center;justify-content:space-between;}
+.template-info h3{font-size:13px;font-weight:500;color:#e0e0e0;}
+.template-badge{font-size:10px;padding:3px 8px;border-radius:10px;background:rgba(0,242,255,0.1);color:var(--primary-cyan);border:1px solid rgba(0,242,255,0.2);}
+
+/* PREVIEW VIEW */
+#preview-view{width:100%;display:none;flex-direction:row;gap:25px;height:100%;}
+.editor-panel{flex:1;background:var(--glass-bg);border:1px solid rgba(255,255,255,0.1);border-radius:15px;padding:20px;overflow-y:auto;display:flex;flex-direction:column;min-width:0;}
+.preview-panel{flex:1;display:flex;justify-content:center;overflow-y:auto;align-items:flex-start;}
+.cv-preview{background:white;width:794px;min-height:1123px;color:#333;box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);}
+
+.cv-form{display:none;flex-direction:column;gap:4px;}
+.cv-form.active{display:flex;}
+.cv-form h3{color:var(--primary-cyan);margin-bottom:12px;border-bottom:1px solid rgba(0,242,255,0.2);padding-bottom:10px;font-size:15px;}
+.cv-form label{display:block;margin-top:10px;font-size:12px;color:#ccc;}
+.cv-form input,.cv-form textarea,.cv-form select{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);padding:9px 12px;border-radius:8px;color:white;font-family:'Poppins',sans-serif;font-size:13px;transition:all 0.3s;margin-top:4px;}
+.cv-form input:focus,.cv-form textarea:focus,.cv-form select:focus{outline:none;border-color:var(--primary-cyan);box-shadow:0 0 10px rgba(0,242,255,0.2);}
+.cv-form select option{background:#0a1628;color:white;}
+
+.nav-btns{display:flex;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06);}
+.nav-btn{flex:1;padding:10px 0;border-radius:10px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#aaa;}
+.nav-btn:hover:not(:disabled){background:rgba(0,242,255,0.1);border-color:var(--primary-cyan);color:var(--primary-cyan);transform:translateY(-1px);}
+.nav-btn:disabled{opacity:0.25;cursor:not-allowed;}
+.nav-btn.is-next{background:rgba(0,242,255,0.12);border-color:var(--primary-cyan);color:var(--primary-cyan);}
+.nav-btn.is-next:hover{background:rgba(0,242,255,0.22);box-shadow:0 4px 15px rgba(0,242,255,0.2);}
+
+.back-btn{align-self:flex-start;background:var(--glass-bg);border:1px solid rgba(255,255,255,0.1);color:white;padding:8px 18px;border-radius:8px;cursor:pointer;margin-bottom:18px;font-family:'Poppins',sans-serif;font-size:13px;transition:all 0.2s ease;}
+.back-btn:hover{border-color:var(--primary-cyan);color:var(--primary-cyan);}
+
+.multi-item-block{background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;margin-bottom:10px;position:relative;}
+.multi-item-block .remove-btn{position:absolute;top:8px;right:8px;background:rgba(255,50,50,0.15);border:1px solid rgba(255,50,50,0.3);color:#ff6b6b;border-radius:6px;padding:2px 8px;cursor:pointer;font-size:11px;font-family:'Poppins',sans-serif;transition:all 0.2s;}
+.multi-item-block .remove-btn:hover{background:rgba(255,50,50,0.35);}
+.add-item-btn{width:100%;background:rgba(0,242,255,0.06);border:1px dashed rgba(0,242,255,0.35);color:var(--primary-cyan);padding:10px;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:13px;transition:all 0.2s;margin-top:5px;}
+.add-item-btn:hover{background:rgba(0,242,255,0.14);}
+.cv-section[draggable="true"]{cursor:grab;position:relative;transition:all 0.2s ease;}
+.cv-section[draggable="true"]::before{content:"⠿ Glisser";position:absolute;top:4px;right:8px;font-size:10px;color:rgba(0,0,0,0.25);background:rgba(0,0,0,0.06);padding:2px 7px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity 0.2s;}
+.cv-section[draggable="true"]:hover::before{opacity:1;}
+.cv-section.drag-over{outline:2px dashed #1a237e!important;background:rgba(26,35,126,0.05)!important;border-radius:6px;}
+.cv-section.dragging{opacity:0.4;transform:scale(0.98);}
+
+.certif-link-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(0,114,255,0.10);border:1px solid rgba(0,114,255,0.3);color:#4da6ff;font-size:11px;padding:3px 10px;border-radius:12px;text-decoration:none;margin-top:5px;transition:all 0.2s;}
+.certif-link-badge:hover{background:rgba(0,114,255,0.22);border-color:#4da6ff;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-glow);border-radius:10px;}
+
+@media (max-width: 1024px) {
+    body { flex-direction: column; overflow-y: auto; height: auto; }
+    #left { width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 10px; }
+    #left .logo-container { width: 100%; margin-bottom: 10px; padding-bottom: 10px; }
+    #left .section-label { width: 100%; text-align: center; margin: 10px 0; }
+    #left .menu-item { flex: 1 1 140px; margin: 4px; justify-content: center; }
+    #right { width: 100%; height: auto; overflow: visible; padding: 15px; }
+    #preview-view { flex-direction: column; }
+    .templates-grid { grid-template-columns: repeat(2, 1fr); }
+    .cv-preview { transform: scale(0.7); transform-origin: top center; margin-bottom: -330px; }
+}
+
+@media (max-width: 768px) {
+    .templates-grid { grid-template-columns: 1fr; }
+    .cv-preview { transform: scale(0.45); transform-origin: top center; margin-bottom: -600px; }
+    #left .menu-item h2 { font-size: 11px; }
+}
+
+@media print {
+    
+    #left, .editor-panel, .back-btn, .nav-btns {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        overflow: visible !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    #right {
+        padding: 0 !important;
+        background: white !important;
+        overflow: visible !important;
+        height: auto !important;
+        display: block !important;
+        align-items: unset !important;
+    }
+
+    #preview-view {
+        display: block !important;
+        height: auto !important;
+        width: 100% !important;
+        gap: 0 !important;
+    }
+
+    .preview-panel {
+        display: block !important;
+        width: 100% !important;
+    }
+
+
+    .cv-preview {
+        box-shadow: none !important;
+        width: 210mm !important;
+        min-height: 297mm !important;
+        margin: 0 auto !important;
+    }
+
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+
+    .photo-box,
+    [style*="background-image"] {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+
+    .cv-section[draggable]::before {
+        display: none !important;
+    }
+    .certif-link-badge {
+        color: #4da6ff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+</style>
+</head>
+<body>
+<div id="left">
+  <div class="logo-container">
+    <h1>JRD CV MAKER</h1>
+    <small>Engineering your career</small>
+  </div>
+
+  <p class="section-label">Design & Style</p>
+  <div class="menu-item" id="btn-modeles" onclick="showMenu('modeles')">
+    <div class="icon">🎨</div><h2>Modèles</h2><span class="step-badge">1</span>
+  </div>
+  <div class="menu-item" id="btn-themes" onclick="showMenu('themes')">
+    <div class="icon">✨</div><h2>Thèmes & Polices</h2><span class="step-badge">2</span>
+  </div>
+
+  <p class="section-label">Contenu du CV</p>
+  <div class="menu-item" id="btn-infos" onclick="showMenu('infos')">
+    <div class="icon">👤</div><h2>Infos Personnelles</h2><span class="step-badge">3</span>
+  </div>
+  <div class="menu-item" id="btn-experiences" onclick="showMenu('experiences')">
+    <div class="icon">💼</div><h2>Expériences Pro</h2><span class="step-badge">4</span>
+  </div>
+  <div class="menu-item" id="btn-formation" onclick="showMenu('formation')">
+    <div class="icon">🎓</div><h2>Formation</h2><span class="step-badge">5</span>
+  </div>
+  <div class="menu-item" id="btn-competences" onclick="showMenu('competences')">
+    <div class="icon">⚡</div><h2>Compétences</h2><span class="step-badge">6</span>
+  </div>
+  <div class="menu-item" id="btn-langues" onclick="showMenu('langues')">
+    <div class="icon">🌍</div><h2>Langues</h2><span class="step-badge">7</span>
+  </div>
+  <div class="menu-item" id="btn-projets" onclick="showMenu('projets')">
+    <div class="icon">🏆</div><h2>Projets & Certifs</h2><span class="step-badge">8</span>
+  </div>
+
+  <p class="section-label">Export</p>
+  <div class="menu-item download-btn" onclick="window.print()">
+    <div class="icon">🖨️</div><h2>Imprimer / PDF</h2>
+  </div>
+</div>
+
+<div id="right">
+
+  <!-- TEMPLATES -->
+  <div id="templates-view">
+    <h2>🎨 Choisir un Modèle</h2>
+    <div class="templates-grid">
+      <div class="template-card" onclick="selectTemplate(this,'Modern Pro')">
+        <div class="template-img-wrapper"><img src="assets/images/template1.png" alt="Modern Pro"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Modern Pro</h3><span class="template-badge">Populaire</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Classic Clean')">
+        <div class="template-img-wrapper"><img src="assets/images/template9.png" alt="Classic Clean"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Classic Clean</h3><span class="template-badge">Simple</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Dark Tech')">
+        <div class="template-img-wrapper"><img src="assets/images/template6.png" alt="Dark Tech"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Dark Tech</h3><span class="template-badge">Tech</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Minimal')">
+        <div class="template-img-wrapper"><img src="assets/images/template4.png" alt="Minimal"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Minimal</h3><span class="template-badge">Épuré</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Creative')">
+        <div class="template-img-wrapper"><img src="assets/images/template5.png" alt="Creative"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Creative</h3><span class="template-badge">Créatif</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Executive')">
+        <div class="template-img-wrapper"><img src="assets/images/template3.png" alt="Executive"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Executive</h3><span class="template-badge">Premium</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Power')">
+        <div class="template-img-wrapper"><img src="assets/images/template7.png" alt="Power"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Power</h3><span class="template-badge">Premium</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Nature')">
+        <div class="template-img-wrapper"><img src="assets/images/template8.png" alt="Nature"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Nature</h3><span class="template-badge">Premium</span></div>
+      </div>
+      <div class="template-card" onclick="selectTemplate(this,'Wide')">
+        <div class="template-img-wrapper"><img src="assets/images/template2.png" alt="Wide"><div class="template-overlay"><span>Utiliser</span></div></div>
+        <div class="template-info"><h3>Wide</h3><span class="template-badge">Premium</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="preview-view" style="display:none;">
+    <div class="editor-panel">
+      <button class="back-btn" onclick="showTemplates()">← Changer de modèle</button>
+      <div id="form-themes" class="cv-form">
+        <h3>✨ Thèmes & Polices</h3>
+        <label>Couleur principale</label>
+        <input type="color" id="input-color" value="#1a237e" oninput="updateTheme()" style="height:40px;padding:2px;">
+        <label>Couleur de fond</label>
+        <input type="color" id="input-bg-color" value="#ffffff" oninput="updateTheme()" style="height:40px;padding:2px;">
+        <label>Police de caractères</label>
+        <select id="input-font" onchange="updateTheme()">
+          <option value="'Poppins',sans-serif">Poppins</option>
+          <option value="'Playfair Display',serif">Playfair Display</option>
+          <option value="'Space Mono',monospace">Space Mono</option>
+          <option value="Arial,sans-serif">Arial</option>
+        </select>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)" disabled>← Précédent</button>
+          <button class="nav-btn is-next" onclick="navigate(1)">Suivant →</button>
+        </div>
+      </div>
+
+      <div id="form-infos" class="cv-form active">
+        <h3>👤 Infos Personnelles</h3>
+        <label>Photo de profil</label>
+        <input type="file" id="input-photo" accept="image/*" onchange="updatePhoto(event)">
+        <label>Nom complet</label>
+        <input type="text" id="input-nom" placeholder="Ex: Jean Dupont" oninput="updatePreview()">
+        <label>Titre professionnel</label>
+        <input type="text" id="input-titre" placeholder="Ex: Data Engineer" oninput="updatePreview()">
+        <label>Email</label>
+        <input type="email" id="input-email" placeholder="jean.dupont@email.com" oninput="updatePreview()">
+        <label>Téléphone</label>
+        <input type="tel" id="input-tel" placeholder="+212 6 12 34 56 78" oninput="updatePreview()">
+        <label>Localisation</label>
+        <input type="text" id="input-loc" placeholder="Al Hoceima, Maroc" oninput="updatePreview()">
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)">← Précédent</button>
+          <button class="nav-btn is-next" onclick="navigate(1)">Suivant →</button>
+        </div>
+      </div>
+
+      <div id="form-experiences" class="cv-form">
+        <h3>💼 Expériences Pro</h3>
+        <div id="exp-list"></div>
+        <button class="add-item-btn" onclick="addExp()">＋ Ajouter une expérience</button>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)">← Précédent</button>
+          <button class="nav-btn is-next" onclick="navigate(1)">Suivant →</button>
+        </div>
+      </div>
+
+      <div id="form-formation" class="cv-form">
+        <h3>🎓 Formation</h3>
+        <div id="form-list"></div>
+        <button class="add-item-btn" onclick="addFormation()">＋ Ajouter une formation</button>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)">← Précédent</button>
+          <button class="nav-btn is-next" onclick="navigate(1)">Suivant →</button>
+        </div>
+      </div>
+      <div id="form-competences" class="cv-form">
+        <h3>⚡ Compétences</h3>
+        <div id="comp-list"></div>
+        <button class="add-item-btn" onclick="addComp()">＋ Ajouter une compétence</button>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)">← Précédent</button>
+          <button class="nav-btn is-next" onclick="navigate(1)">Suivant →</button>
+        </div>
+      </div>
+
+      <div id="form-langues" class="cv-form">
+        <h3>🌍 Langues</h3>
+        <div id="langue-list"></div>
+        <button class="add-item-btn" onclick="addLangue()">＋ Ajouter une langue</button>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)">← Précédent</button>
+          <button class="nav-btn is-next" onclick="navigate(1)">Suivant →</button>
+        </div>
+      </div>
+
+      <div id="form-projets" class="cv-form">
+        <h3>🏆 Projets & Certifications</h3>
+        <div id="proj-list"></div>
+        <button class="add-item-btn" onclick="addProj()">＋ Ajouter un projet / certif</button>
+        <div class="nav-btns">
+          <button class="nav-btn" onclick="navigate(-1)">← Précédent</button>
+          <button class="nav-btn is-next" onclick="window.print()" style="background:linear-gradient(135deg,#00f2ff,#0072ff);color:#000;border:none;">🖨️ Imprimer PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-panel">
+      <div class="cv-preview">
+        <div id="cv-render" class="theme-modern-pro"
+          style="--cv-primary-color:#1a237e;--cv-font-family:'Poppins',sans-serif;width:100%;min-height:100%;">
+          <div class="cv-top-gradient"></div>
+          <div class="cv-section cv-header" draggable="true" id="section-header">
+            <div class="badge-title">Profile</div>
+            <div class="header-deco"></div>
+            <div class="photo-box"></div>
+            <div class="contact-info">
+              <h1 id="render-nom" style="margin:0;font-size:28px;">Jean Dupont</h1>
+              <h3 id="render-titre" style="margin:5px 0 15px 0;font-weight:600;">Data Engineer</h3>
+              <p style="margin:5px 0;font-size:13px;">📞 <span id="render-tel">+212 6 12 34 56 78</span></p>
+              <p style="margin:5px 0;font-size:13px;">✉️ <span id="render-email">jean.dupont@email.com</span></p>
+              <p style="margin:5px 0;font-size:13px;">📍 <span id="render-loc">Al Hoceima, Maroc</span></p>
+            </div>
+          </div>
+          <div class="cv-body-wrapper">
+            <div class="badge-title" style="top:-15px;">About Me</div>
+            <div class="cv-body">
+              <div class="cv-col" id="col-left">
+                <div class="cv-section" draggable="true" id="section-experiences">
+                  <div class="section-title">EXPÉRIENCES</div>
+                  <div id="render-exp-list"></div>
+                </div>
+                <div class="cv-section" draggable="true" id="section-projets">
+                  <div class="section-title">PROJETS & CERTIFS</div>
+                  <div id="render-proj-list"></div>
+                </div>
+              </div>
+              <div class="cv-col" id="col-right">
+                <div class="cv-section" draggable="true" id="section-formation">
+                  <div class="section-title">FORMATIONS</div>
+                  <div id="render-form-list"></div>
+                </div>
+                <div class="cv-section" draggable="true" id="section-competences">
+                  <div class="section-title">COMPÉTENCES</div>
+                  <div id="render-comp-list"></div>
+                </div>
+                <div class="cv-section" draggable="true" id="section-langues">
+                  <div class="section-title">LANGUES</div>
+                  <div id="render-langue-list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const STEPS=['themes','infos','experiences','formation','competences','langues','projets'];
+let currentStep=1;
+function navigate(dir){
+  const n=currentStep+dir;
+  if(n<0||n>=STEPS.length)return;
+  currentStep=n;
+  showMenu(STEPS[currentStep]);
+}
+
+
+let exps=[],forms=[],comps=[],langues=[],projs=[];
+
+function showMenu(section){
+  document.querySelectorAll('.cv-form').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('menu-active'));
+  if(section==='modeles'){showTemplates();return;}
+  document.getElementById('preview-view').style.display='flex';
+  document.getElementById('templates-view').style.display='none';
+  const map={themes:'form-themes',infos:'form-infos',experiences:'form-experiences',
+    formation:'form-formation',competences:'form-competences',langues:'form-langues',projets:'form-projets'};
+  if(map[section])document.getElementById(map[section]).classList.add('active');
+  const btn=document.getElementById('btn-'+section);
+  if(btn)btn.classList.add('menu-active');
+  const idx=STEPS.indexOf(section);
+  if(idx>=0)currentStep=idx;
+}
+function showTemplates(){
+  document.getElementById('templates-view').style.display='block';
+  document.getElementById('preview-view').style.display='none';
+}
+function selectTemplate(card, name) {
+    document.querySelectorAll('.template-card')
+        .forEach(c => c.classList.remove('selected'));
+
+    card.classList.add('selected');
+
+    const render = document.getElementById('cv-render');
+    render.className = ''; // Efface toutes les classes
+
+    // "Modern Pro" → "theme-modern-pro"
+    const themeClass = 'theme-' + name.toLowerCase().replace(/\s+/g, '-');
+    render.classList.add(themeClass);
+
+    render.style.setProperty(
+        '--cv-primary-color',
+        document.getElementById('input-color')?.value || '#1a237e'
+    );
+    render.style.setProperty(
+        '--cv-bg-color',
+        document.getElementById('input-bg-color')?.value || '#ffffff'
+    );
+    render.style.setProperty(
+        '--cv-font-family',
+        document.getElementById('input-font')?.value || "'Poppins', sans-serif"
+    );
+    render.style.width      = '100%';
+    render.style.minHeight  = '100%';
+
+    document.getElementById('templates-view').style.display = 'none';
+    document.getElementById('preview-view').style.display   = 'flex';
+    currentStep = 1;
+    showMenu('infos');
+}
+function updateTheme(){
+  const color=document.getElementById('input-color').value;
+  const bg=document.getElementById('input-bg-color').value;
+  const font=document.getElementById('input-font').value;
+  const r=document.getElementById('cv-render');
+  r.style.setProperty('--cv-primary-color',color);
+  r.style.setProperty('--cv-bg-color',bg);
+  r.style.setProperty('--cv-font-family',font);
+  r.style.fontFamily=font;r.style.backgroundColor=bg;
+}
+
+function updatePreview(){
+  setText('render-nom','input-nom','Jean Dupont');
+  setText('render-titre','input-titre','Data Engineer');
+  setText('render-email','input-email','jean.dupont@email.com');
+  setText('render-tel','input-tel','+212 6 12 34 56 78');
+  setText('render-loc','input-loc','Al Hoceima, Maroc');
+  renderAll();
+}
+function setText(rid,iid,fb){const el=document.getElementById(rid);const v=document.getElementById(iid)?.value;if(el)el.textContent=v||fb;}
+function updatePhoto(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{const box=document.querySelector('.photo-box');if(box){box.style.backgroundImage=`url(${ev.target.result})`;box.style.backgroundSize='cover';box.style.backgroundPosition='center';}};
+  r.readAsDataURL(file);
+}
+function readImg(file,cb){const r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(file);}
+
+function addExp(data={}){
+  const id=Date.now();
+  const obj={id,img:data.img||'',titre:data.titre||'',ent:data.ent||'',date:data.date||'',desc:data.desc||''};
+  exps.push(obj);renderExpForm(obj);renderAll();
+}
+function renderExpForm(obj){
+  const list=document.getElementById('exp-list');
+  const div=document.createElement('div');
+  div.className='multi-item-block';div.id='exp-block-'+obj.id;
+  div.innerHTML=`
+    <button class="remove-btn" onclick="removeItem('exp',${obj.id})">✕ Retirer</button>
+    <label>Logo entreprise</label><input type="file" accept="image/*" onchange="updateItemImg(event,'exp',${obj.id})">
+    <label>Poste</label><input type="text" placeholder="Ex: Data Scientist" value="${obj.titre}" oninput="updateItemField('exp',${obj.id},'titre',this.value)">
+    <label>Entreprise</label><input type="text" placeholder="Ex: Tech Corp" value="${obj.ent}" oninput="updateItemField('exp',${obj.id},'ent',this.value)">
+    <label>Période</label><input type="text" placeholder="Ex: 2022 – 2024" value="${obj.date}" oninput="updateItemField('exp',${obj.id},'date',this.value)">
+    <label>Description</label><textarea rows="3" placeholder="Missions..." oninput="updateItemField('exp',${obj.id},'desc',this.value)">${obj.desc}</textarea>`;
+  list.appendChild(div);
+}
+function addFormation(data={}){
+  const id=Date.now();
+  const obj={id,img:data.img||'',diploma:data.diploma||'',school:data.school||'',date:data.date||''};
+  forms.push(obj);renderFormationForm(obj);renderAll();
+}
+function renderFormationForm(obj){
+  const list=document.getElementById('form-list');
+  const div=document.createElement('div');
+  div.className='multi-item-block';div.id='form-block-'+obj.id;
+  div.innerHTML=`
+    <button class="remove-btn" onclick="removeItem('form',${obj.id})">✕ Retirer</button>
+    <label>Logo école</label><input type="file" accept="image/*" onchange="updateItemImg(event,'form',${obj.id})">
+    <label>Diplôme</label><input type="text" placeholder="Ex: Master Informatique" value="${obj.diploma}" oninput="updateItemField('form',${obj.id},'diploma',this.value)">
+    <label>École</label><input type="text" placeholder="Ex: ENSAH" value="${obj.school}" oninput="updateItemField('form',${obj.id},'school',this.value)">
+    <label>Années</label><input type="text" placeholder="Ex: 2020 – 2023" value="${obj.date}" oninput="updateItemField('form',${obj.id},'date',this.value)">`;
+  list.appendChild(div);
+}
+function addComp(data={}){
+  const id=Date.now();
+  const obj={id,img:data.img||'',name:data.name||'',level:data.level||80};
+  comps.push(obj);renderCompForm(obj);renderAll();
+}
+function renderCompForm(obj){
+  const list=document.getElementById('comp-list');
+  const div=document.createElement('div');
+  div.className='multi-item-block';div.id='comp-block-'+obj.id;
+  div.innerHTML=`
+    <button class="remove-btn" onclick="removeItem('comp',${obj.id})">✕ Retirer</button>
+    <label>Icône / Logo</label><input type="file" accept="image/*" onchange="updateItemImg(event,'comp',${obj.id})">
+    <label>Compétence</label><input type="text" placeholder="Ex: Python / SQL" value="${obj.name}" oninput="updateItemField('comp',${obj.id},'name',this.value)">
+    <label>Niveau : <span id="comp-lbl-${obj.id}">${obj.level}</span>%</label>
+    <input type="range" min="0" max="100" value="${obj.level}" oninput="updateItemField('comp',${obj.id},'level',this.value);document.getElementById('comp-lbl-${obj.id}').textContent=this.value">`;
+  list.appendChild(div);
+}
+
+function addLangue(data={}){
+  const id=Date.now();
+  const obj={id,img:data.img||'',name:data.name||'',level:data.level||'',niveauNum:data.niveauNum||70};
+  langues.push(obj);renderLangueForm(obj);renderAll();
+}
+function renderLangueForm(obj){
+  const list=document.getElementById('langue-list');
+  const div=document.createElement('div');
+  div.className='multi-item-block';div.id='langue-block-'+obj.id;
+  const opts=['Débutant (A1)','Élémentaire (A2)','Intermédiaire (B1)','Avancé (B2)','Courant (C1)','Bilingue (C2)','Langue maternelle'];
+  div.innerHTML=`
+    <button class="remove-btn" onclick="removeItem('langue',${obj.id})">✕ Retirer</button>
+    <label>Drapeau / Image</label><input type="file" accept="image/*" onchange="updateItemImg(event,'langue',${obj.id})">
+    <label>Langue</label><input type="text" placeholder="Ex: Anglais" value="${obj.name}" oninput="updateItemField('langue',${obj.id},'name',this.value)">
+    <label>Niveau</label>
+    <select onchange="updateItemField('langue',${obj.id},'level',this.value)">
+      <option value="">-- Choisir --</option>
+      ${opts.map(o=>`<option ${obj.level===o?'selected':''}>${o}</option>`).join('')}
+    </select>
+    <label>Barre : <span id="lng-lbl-${obj.id}">${obj.niveauNum}</span>%</label>
+    <input type="range" min="0" max="100" value="${obj.niveauNum}" oninput="updateItemField('langue',${obj.id},'niveauNum',this.value);document.getElementById('lng-lbl-${obj.id}').textContent=this.value">`;
+  list.appendChild(div);
+}
+
+function addProj(data={}){
+  const id=Date.now();
+  const obj={id,img:data.img||'',name:data.name||'',desc:data.desc||'',lien:data.lien||'',lienLabel:data.lienLabel||'Voir le certificat'};
+  projs.push(obj);renderProjForm(obj);renderAll();
+}
+function renderProjForm(obj){
+  const list=document.getElementById('proj-list');
+  const div=document.createElement('div');
+  div.className='multi-item-block';div.id='proj-block-'+obj.id;
+  div.innerHTML=`
+    <button class="remove-btn" onclick="removeItem('proj',${obj.id})">✕ Retirer</button>
+    <label>Image du projet</label><input type="file" accept="image/*" onchange="updateItemImg(event,'proj',${obj.id})">
+    <label>Nom du projet / certif</label>
+    <input type="text" placeholder="Ex: AWS Solutions Architect" value="${obj.name}" oninput="updateItemField('proj',${obj.id},'name',this.value)">
+    <label>Description</label>
+    <textarea rows="2" placeholder="Brève description..." oninput="updateItemField('proj',${obj.id},'desc',this.value)">${obj.desc}</textarea>
+    <label>🔗 URL du certificat / projet</label>
+    <input type="url" placeholder="https://..." value="${obj.lien}" oninput="updateItemField('proj',${obj.id},'lien',this.value)">
+    <label>✏️ Texte du bouton (renommable sur le CV)</label>
+    <input type="text" placeholder="Ex: Voir sur Credly" value="${obj.lienLabel}" oninput="updateItemField('proj',${obj.id},'lienLabel',this.value)">`;
+  list.appendChild(div);
+}
+
+/* ── GÉNÉRIQUES ── */
+const LISTS={exp:exps,form:forms,comp:comps,langue:langues,proj:projs};
+function updateItemField(type,id,field,value){const obj=LISTS[type].find(o=>o.id===id);if(obj){obj[field]=value;renderAll();}}
+function updateItemImg(e,type,id){const file=e.target.files[0];if(!file)return;readImg(file,src=>updateItemField(type,id,'img',src));}
+function removeItem(type,id){const arr=LISTS[type];const idx=arr.findIndex(o=>o.id===id);if(idx>-1)arr.splice(idx,1);document.getElementById(type+'-block-'+id)?.remove();renderAll();}
+
+
+function renderAll(){renderExpList();renderFormList();renderCompList();renderLangueList();renderProjList();}
+
+function renderExpList(){
+  const el=document.getElementById('render-exp-list');
+  el.innerHTML=exps.length?exps.map(o=>`
+    <div class="timeline-item" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${o.img?`<img src="${o.img}" style="width:38px;height:38px;border-radius:5px;object-fit:cover;">`:''}
+        <div>
+          <div class="timeline-bg"><span>${o.titre||'Poste'}</span></div>
+          <h4 style="margin:0;font-style:italic;font-size:12px;">${o.ent||'Entreprise'}</h4>
+          ${o.date?`<span style="font-size:11px;color:#888;">${o.date}</span>`:''}
+        </div>
+      </div>
+      ${o.desc?`<p style="margin-top:6px;font-size:12px;">${o.desc}</p>`:''}
+    </div>`).join(''):'<p style="font-size:12px;color:#aaa;font-style:italic;">Aucune expérience ajoutée</p>';
+}
+function renderFormList(){
+  const el=document.getElementById('render-form-list');
+  el.innerHTML=forms.length?forms.map(o=>`
+    <div class="timeline-item" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${o.img?`<img src="${o.img}" style="width:38px;height:38px;border-radius:5px;object-fit:cover;">`:''}
+        <div>
+          <div class="timeline-bg"><span>${o.diploma||'Diplôme'}</span></div>
+          <h4 style="margin:0;font-style:italic;font-size:12px;">${o.school||'École'}</h4>
+          ${o.date?`<span style="font-size:11px;color:#888;">${o.date}</span>`:''}
+        </div>
+      </div>
+    </div>`).join(''):'<p style="font-size:12px;color:#aaa;font-style:italic;">Aucune formation ajoutée</p>';
+}
+function renderCompList(){
+  const el=document.getElementById('render-comp-list');
+  el.innerHTML=comps.length?comps.map(o=>`
+    <div style="margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+      ${o.img?`<img src="${o.img}" style="width:28px;height:28px;border-radius:3px;object-fit:contain;">`:''}
+      <div style="flex-grow:1;">
+        <span style="font-size:12px;font-weight:600;">${o.name||'Compétence'}</span>
+        <div style="width:100%;height:7px;background:#ddd;border-radius:4px;margin-top:4px;">
+          <div style="width:${o.level}%;height:100%;background:var(--cv-primary-color);border-radius:4px;"></div>
+        </div>
+      </div>
+      <span style="font-size:10px;color:#888;min-width:28px;">${o.level}%</span>
+    </div>`).join(''):'<p style="font-size:12px;color:#aaa;font-style:italic;">Aucune compétence ajoutée</p>';
+}
+function renderLangueList(){
+  const el=document.getElementById('render-langue-list');
+  el.innerHTML=langues.length?langues.map(o=>`
+    <div style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        ${o.img?`<img src="${o.img}" style="width:26px;height:18px;border-radius:2px;object-fit:cover;">`:''}
+        <span style="font-size:12px;font-weight:600;">${o.name||'Langue'}</span>
+        ${o.level?`<span style="font-size:11px;color:#777;margin-left:auto;">${o.level}</span>`:''}
+      </div>
+      <div style="width:100%;height:5px;background:#ddd;border-radius:3px;">
+        <div style="width:${o.niveauNum}%;height:100%;background:var(--cv-primary-color);border-radius:3px;opacity:0.75;"></div>
+      </div>
+    </div>`).join(''):'<p style="font-size:12px;color:#aaa;font-style:italic;">Aucune langue ajoutée</p>';
+}
+function renderProjList(){
+  const el=document.getElementById('render-proj-list');
+  el.innerHTML=projs.length?projs.map(o=>`
+    <div class="timeline-item" style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        ${o.img?`<img src="${o.img}" style="width:38px;height:38px;border-radius:5px;object-fit:cover;">`:''}
+        <div><div class="timeline-bg"><span>${o.name||'Projet / Certif'}</span></div></div>
+      </div>
+      ${o.desc?`<p style="margin-top:5px;font-size:12px;">${o.desc}</p>`:''}
+      ${o.lien?`<a class="certif-link-badge" href="${o.lien}" target="_blank" rel="noopener">🔗 ${o.lienLabel||'Voir le certificat'}</a>`:''}
+    </div>`).join(''):'<p style="font-size:12px;color:#aaa;font-style:italic;">Aucun projet ajouté</p>';
+}
+
+
+let dragSrc=null;
+function initDragDrop(){
+  document.querySelectorAll('.cv-section[draggable="true"]').forEach(sec=>{
+    sec.addEventListener('dragstart',e=>{dragSrc=sec;sec.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
+    sec.addEventListener('dragend',()=>{sec.classList.remove('dragging');document.querySelectorAll('.cv-section').forEach(s=>s.classList.remove('drag-over'));dragSrc=null;});
+    sec.addEventListener('dragover',e=>{e.preventDefault();if(dragSrc&&dragSrc!==sec)sec.classList.add('drag-over');});
+    sec.addEventListener('dragleave',()=>sec.classList.remove('drag-over'));
+    sec.addEventListener('drop',e=>{
+      e.preventDefault();sec.classList.remove('drag-over');
+      if(!dragSrc||dragSrc===sec)return;
+      const parent=sec.parentNode;
+      const siblings=[...parent.children];
+      const fi=siblings.indexOf(dragSrc),ti=siblings.indexOf(sec);
+      if(fi<ti)parent.insertBefore(dragSrc,sec.nextSibling);
+      else parent.insertBefore(dragSrc,sec);
+    });
+  });
+}
+
+
+window.addEventListener('DOMContentLoaded',()=>{
+  addExp({titre:'Data Scientist',ent:'Tech Corp',date:'2022 – 2024',desc:'Développement de modèles prédictifs et dashboards.'});
+  addFormation({diploma:"Diplôme d'Ingénieur",school:'ENSAH – Al Hoceima',date:'2019 – 2024'});
+  addComp({name:'Python / SQL',level:85});
+  addComp({name:'Machine Learning',level:75});
+  addLangue({name:'Anglais',level:'Courant (C1)',niveauNum:80});
+  addLangue({name:'Français',level:'Bilingue (C2)',niveauNum:95});
+  addProj({name:'Certification AWS',desc:'Solutions Architect Associate',lien:'',lienLabel:'Voir sur Credly'});
+  document.getElementById('templates-view').style.display='block';
+  initDragDrop();
+});
+</script>
+<script src="assets/js/chatbot.js"></script>
+</body>
+</html>

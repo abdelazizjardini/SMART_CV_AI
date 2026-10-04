@@ -1,0 +1,27 @@
+# Base de données
+*.db
+*.sqlite
+*.sqlite3
+cv_maker.db
+backend/cv_maker.db
+
+# Variables d'environnement et secrets
+.env
+.env.*
+*.env
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Dossiers de configuration IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build & Dist
+.dist/
+dist/
+build/
